@@ -5,6 +5,7 @@ import Column from "./Column";
 export default function KanbanBoard() {
   const [completed, setCompleted] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
+  const [inprogress, setInprogress] = useState([]);
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos")
@@ -12,6 +13,7 @@ export default function KanbanBoard() {
       .then((json) => {
         setCompleted(json.filter((task) => task.completed));
         setIncomplete(json.filter((task) => !task.completed));
+        setInprogress(json.filter((task) => task.inprogress));
       });
   }, []);
 
@@ -25,12 +27,17 @@ export default function KanbanBoard() {
     if (source.droppableId == 2) {
       setCompleted(removeItemById(draggableId, completed));
     } else {
+      setInprogress(removeItemById(draggableId, inprogress));
       setIncomplete(removeItemById(draggableId, incomplete));
     }
 
     // GET ITEM
 
-    const task = findItemById(draggableId, [...incomplete, ...completed]);
+    const task = findItemById(draggableId, [
+      ...incomplete,
+      ...completed,
+      ...inprogress,
+    ]);
 
     //ADD ITEM
     if (destination.droppableId == 2) {
@@ -38,6 +45,7 @@ export default function KanbanBoard() {
     } else {
       setIncomplete([{ ...task, completed: !task.completed }, ...incomplete]);
     }
+    setInprogress([{ ...task, inprogress: task.inprogress }, ...inprogress]);
   };
 
   function findItemById(id, array) {
@@ -62,7 +70,7 @@ export default function KanbanBoard() {
       >
         <Column title={"TODO"} tasks={incomplete} id={"1"} />
         <Column title={"DONE"} tasks={completed} id={"2"} />
-        <Column title={"BACKLOG"} tasks={completed} id={"3"} />
+        <Column title={"BACKLOG"} tasks={inprogress} id={"3"} />
       </div>
     </DragDropContext>
   );
