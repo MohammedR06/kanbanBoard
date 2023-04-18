@@ -60,7 +60,7 @@ export default function KanbanBoard() {
           flexDirection: "row",
         }}
       >
-        <Column title={"TO DO"} tasks={incomplete} id={"1"} />
+        <Column title={"TODO"} tasks={incomplete} id={"1"} />
         <Column title={"DONE"} tasks={completed} id={"2"} />
         <Column title={"BACKLOG"} tasks={[]} id={"3"} />
       </div>
