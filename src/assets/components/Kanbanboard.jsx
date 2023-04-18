@@ -19,26 +19,20 @@ export default function KanbanBoard() {
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-
     if (source.droppableId == destination.droppableId) return;
-
     //REMOVE FROM SOURCE ARRAY
-
     if (source.droppableId == 2) {
       setCompleted(removeItemById(draggableId, completed));
     } else {
       setInprogress(removeItemById(draggableId, inprogress));
       setIncomplete(removeItemById(draggableId, incomplete));
     }
-
     // GET ITEM
-
     const task = findItemById(draggableId, [
       ...incomplete,
       ...completed,
       ...inprogress,
     ]);
-
     //ADD ITEM
     if (destination.droppableId == 2) {
       setCompleted([{ ...task, completed: !task.completed }, ...completed]);
